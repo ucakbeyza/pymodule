@@ -1,0 +1,16 @@
+/__pycache__
+/autosave
+/config
+/help
+/history.py
+/history_internal.py
+/langconfig
+/lsp_paths
+/onlinehelp
+/path
+/pdb_history.sqlite
+/plugins
+/python
+/template.py
+/workingdir
+/spyder.lock
