@@ -1,78 +1,75 @@
-# Adınız, soyadınız, öğrenci numaranız ve notunuzu belirten fonksiyon
-def bilgi_ver():
-    ad = "Beyza"
-    soyad = "Ucak"
-    ogrenci_no = "211220032"
-    notum = "hello world"
+class Personel:
+    def __init__(self, adi, departman, calisma_yili, maas):
+        self.adi = adi
+        self.departman = departman
+        self.calisma_yili = calisma_yili
+        self.maas = maas
 
-    print("Ad:", ad)
-    print("Soyad:", soyad)
-    print("Öğrenci Numarası:", ogrenci_no)
-    print("Not:", notum)
+class Firma:
+    def __init__(self):
+        self.personel_listesi = []
 
-# Kendisine gönderilen karakterin bir harf olup olmadığını bulan fonksiyon
-def harf_mi(karakter):
-    return karakter.isalpha()
+    def personel_ekle(self, personel):
+        self.personel_listesi.append(personel)
 
-# Kendisine gelen harfi (büyükse) küçük harfe çeviren fonksiyon
-def kucuk_harf_yap(harf):
-    return harf.lower()
+    def personel_listele(self):
+        for personel in self.personel_listesi:
+            print(f"Adı: {personel.adi}, Departmanı: {personel.departman}, Çalışma Yılı: {personel.calisma_yili}, Maaşı: {personel.maas}")
 
-# Kendisine gönderilen metinde harflerin kullanım sıklığını (yüzdelik oranını) bulan fonksiyon
-def harf_oranlari(metin):
-    harf_sayilari = {}
-    toplam_harf_sayisi = 0
+    def maas_zammi(self, personel, zam_orani):
+        for p in self.personel_listesi:
+            if p == personel:
+                p.maas *= (1 + zam_orani / 100)
 
-    for harf in metin:
-        if harf_mi(harf):
-            harf = kucuk_harf_yap(harf)
-            harf_sayilari[harf] = harf_sayilari.get(harf, 0) + 1
-            toplam_harf_sayisi += 1
+    def personel_cikart(self, personel):
+        if personel in self.personel_listesi:
+            self.personel_listesi.remove(personel)
+        else:
+            print("Personel listede bulunamadı.")
 
-    oranlar = {}
+# Personel nesneleri oluşturulması
+personel1 = Personel("Ipek", "Muhasebe", 3, 5000)
+personel2 = Personel("Beyza", "Pazarlama", 5, 6000)
 
-    for harf, sayi in harf_sayilari.items():
-        oranlar[harf] = {"kullanım adedi": sayi, "kullanım oranı": (sayi / toplam_harf_sayisi) * 100}
+# Firma nesnesi oluşturulması
+firma = Firma()
 
-    return oranlar
+# Kullanıcıdan personel bilgilerini alma
+adi = input("Personel adını giriniz: ")
+departman = input("Personelin çalıştığı departmanı giriniz: ")
+calisma_yili = int(input("Personelin çalışma yılını giriniz: "))
+maas = float(input("Personelin maaşını giriniz: "))
 
-# Metindeki kelime sayısını bulan fonksiyon
-def kelime_sayisi(metin):
-    kelimeler = metin.split()
-    return len(kelimeler)
+# Personel nesnesi oluşturma
+yeni_personel = Personel(adi, departman, calisma_yili, maas)
 
-# Metindeki cümle sayısını bulan fonksiyon
-def cumle_sayisi(metin):
-    cumleler = metin.split('.')
-    return len(cumleler)
+# Oluşturulan personeli firmaya ekleme
+firma.personel_ekle(yeni_personel)
 
-# Metindeki özel karakter sayısını bulan fonksiyon
-def ozel_karakter_sayisi(metin):
-    ozel_karakterler = "!@#$%^&*()-_=+[{]}\|;:'\",<.>/?`~"
-    sayac = 0
-    for karakter in metin:
-        if karakter in ozel_karakterler:
-            sayac += 1
-    return sayac
 
-def main():
-    metin = input("Lütfen bir metin girin: ")
-    oranlar = harf_oranlari(metin)
-    kelime_say = kelime_sayisi(metin)
-    cumle_say = cumle_sayisi(metin)
-    ozel_karakter_say = ozel_karakter_sayisi(metin)
+# Personel ekleme
+firma.personel_ekle(personel1)
+firma.personel_ekle(personel2)
 
-    print("\nMetindeki harflerin yüzde oranları:")
-    for harf in sorted(oranlar.keys()):
-        bilgi = oranlar[harf]
-        kullanım_adedi = bilgi["kullanım adedi"]
-        kullanım_oranı = bilgi["kullanım oranı"]
-        print(f"'{harf}':\tKullanım adedi: {kullanım_adedi}\tKullanım oranı: %{kullanım_oranı:.2f}")
+# Personel listeleme
+print("Firma Çalışanları:")
+firma.personel_listele()
 
-    print(f"\nMetindeki kelime sayısı: {kelime_say}")
-    print(f"Metindeki cümle sayısı: {cumle_say}")
-    print(f"Metindeki özel karakter sayısı: {ozel_karakter_say}")
+# Maaş zammı
+firma.maas_zammi(personel1, 10)
 
-if __name__ == "__main__":
-    bilgi_ver()
-    main()
+# Personel çıkartma
+firma.personel_cikart(personel2)
+
+# Maaş zammı
+zam_orani = float(input("\nMaaş zam oranını giriniz (% cinsinden): "))
+firma.maas_zammi(yeni_personel, zam_orani)
+
+# Personel çıkartma
+cikar = input("\nPersoneli çıkarmak istiyor musunuz? (Evet/Hayır): ").lower()
+if cikar == "evet":
+    firma.personel_cikart(yeni_personel)
+
+# Güncellenmiş personel listesi
+print("\nGüncellenmiş Firma Çalışanları:")
+firma.personel_listele()
